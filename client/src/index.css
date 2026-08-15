@@ -60,11 +60,18 @@
 
 html, body {
   min-height: 100%;
+  width: 100%;
+  overflow-x: hidden;
   font-family: var(--font-family);
   background-color: var(--color-bg);
   color: var(--color-text-body);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+img, svg, video {
+  max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -75,6 +82,7 @@ a {
 button, input, select, textarea {
   font-family: inherit;
   font-size: inherit;
+  box-sizing: border-box;
 }
 
 /* App Layout */
@@ -1312,11 +1320,16 @@ button, input, select, textarea {
 @media (max-width: 900px) {
   .filters-grid {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
   .listing-detail-card {
     grid-template-columns: 1fr;
     gap: 24px;
     padding: 24px;
+  }
+  .listing-grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
   }
 }
 
@@ -1324,23 +1337,141 @@ button, input, select, textarea {
   .container {
     padding: 16px 14px 48px;
   }
+  .page-hero__title {
+    font-size: 1.5rem;
+  }
+  .page-hero__subtitle {
+    font-size: 0.9rem;
+  }
+  .filters-container {
+    padding: 14px 12px;
+    margin-bottom: 20px;
+  }
   .filters-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .filter-input--price {
+    min-width: 0;
+    flex: 1;
   }
   .form-row {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
   .form-card {
-    padding: 24px 18px;
+    padding: 20px 14px;
+    border-radius: var(--radius-lg);
   }
+  .form-card__title {
+    font-size: 1.35rem;
+  }
+  .form-fieldset {
+    padding: 14px 10px;
+  }
+  .footer__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 520px) {
   .navbar__inner {
-    padding: 10px 14px;
+    padding: 8px 12px;
+    gap: 8px;
   }
-  .brand-badge {
+  .brand-name {
+    font-size: 1.15rem;
+  }
+  .brand-logo-icon {
+    width: 30px;
+    height: 30px;
+  }
+  .brand-logo-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+  .navbar__nav {
+    gap: 6px;
+  }
+  .nav-link {
+    padding: 6px 8px;
+    font-size: 0.84rem;
+  }
+  .btn--sell {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+  .btn--login, .btn--logout {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+  .user-pill {
+    padding: 2px 6px;
+    gap: 4px;
+  }
+  .user-pill .user-name {
     display: none;
+  }
+  .user-avatar {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+  .listing-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .listing-detail-card {
+    padding: 16px 12px;
+    border-radius: var(--radius-lg);
+    gap: 16px;
+  }
+  .listing-detail__title {
+    font-size: 1.28rem;
+  }
+  .listing-detail__price {
+    font-size: 1.6rem;
+    margin-bottom: 16px;
+  }
+  .specs-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .listing-detail__actions button {
+    width: 100%;
   }
   .auth-notice {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
+    text-align: center;
+    gap: 8px;
+  }
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+  .pagination-btn {
+    height: 34px;
+    padding: 0 10px;
+    font-size: 0.82rem;
+  }
+  .pagination-number-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 0.84rem;
+  }
+  .dialog {
+    padding: 20px 16px;
+  }
+  .dialog__actions {
+    flex-direction: column-reverse;
+    width: 100%;
+    gap: 8px;
+  }
+  .dialog__actions .btn {
+    width: 100%;
   }
 }
