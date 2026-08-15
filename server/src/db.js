@@ -9,18 +9,21 @@ const DB_FILE = path.join(DB_DIR, 'marketplace.db');
 
 let db = null;
 
-export function getDb() {
-  if (db) return db;
+export function getDb(customPath = null) {
+  if (db && !customPath) return db;
 
-  // Ensure data directory exists before opening database
-  if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
+  const targetPath = customPath || DB_FILE;
+  const targetDir = path.dirname(targetPath);
+
+  if (!fs.existsSync(targetDir)) {
+    fs.mkdirSync(targetDir, { recursive: true });
   }
 
-  db = new Database(DB_FILE); // creates the file if it doesn't exist — this is your persistence
-  db.pragma('journal_mode = WAL'); // safer concurrent writes
+  const instance = new Database(targetPath);
+  instance.pragma('journal_mode = WAL');
+  instance.pragma('foreign_keys = ON');
 
-  db.exec(`
+  instance.exec(`
     CREATE TABLE IF NOT EXISTS listings (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       title TEXT NOT NULL,
@@ -40,5 +43,16 @@ export function getDb() {
     );
   `);
 
-  return db;
+  if (!customPath) {
+    db = instance;
+  }
+
+  return instance;
+}
+
+export function closeDb() {
+  if (db) {
+    db.close();
+    db = null;
+  }
 }

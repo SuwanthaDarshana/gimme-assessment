@@ -1,8 +1,16 @@
+/**
+ * Request logging middleware.
+ * Logs method, route path, HTTP status, and response duration in ms.
+ */
 export function requestLogger(req, res, next) {
   const start = Date.now();
+
   res.on('finish', () => {
-    const ms = Date.now() - start;
-    console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} ${res.statusCode} - ${ms}ms`);
+    const duration = Date.now() - start;
+    console.log(
+      `[${new Date().toISOString()}] ${req.method} ${req.originalUrl} -> ${res.statusCode} (${duration}ms)`
+    );
   });
+
   next();
 }
