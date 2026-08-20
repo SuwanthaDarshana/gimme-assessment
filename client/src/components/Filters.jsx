@@ -70,7 +70,7 @@ export default function Filters({ filters, onChange, onReset }) {
             ))}
           </select>
         </div>
-
+            
         {/* Price Range Filter */}
         <div className="filter-group filter-group--price">
           <label htmlFor="min-price-input" className="filter-label">Price Range ($)</label>

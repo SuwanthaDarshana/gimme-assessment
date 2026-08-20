@@ -1,122 +1,108 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+import { AuthProvider, useAuth } from './api/AuthContext';
+import ListingsPage from './pages/ListingsPage';
+import ListingDetailPage from './pages/ListingDetailPage';
+import CreateListingPage from './pages/CreateListingPage';
+import LoginPage from './pages/LoginPage';
 
-function App() {
-  const [count, setCount] = useState(0)
+function NavBar() {
+  const { isAuthenticated, username, logout } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <header className="navbar">
+      <div className="navbar__inner">
+        <Link to="/" className="navbar__brand">
+          <div className="brand-logo-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+          </div>
+          <span className="brand-name">Gimme</span>
+        </Link>
 
-      <div className="ticks"></div>
+        <nav className="navbar__nav">
+          <Link
+            to="/"
+            className={`nav-link ${location.pathname === '/' ? 'nav-link--active' : ''}`}
+          >
+            Browse
+          </Link>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <Link
+            to="/create"
+            className="btn btn--sell"
+            id="nav-sell-btn"
+          >
+            Sell an Item
+          </Link>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          {isAuthenticated ? (
+            <div className="navbar__user-menu">
+              <div className="user-pill">
+                <span className="user-avatar">{username ? username[0].toUpperCase() : 'U'}</span>
+                <span className="user-name">{username}</span>
+              </div>
+              <button
+                type="button"
+                className="btn btn--logout"
+                onClick={() => {
+                  logout();
+                  navigate('/');
+                }}
+                id="nav-logout-btn"
+              >
+                Sign out
+              </button>
+            </div>
+          ) : (
+            <Link
+              to="/login"
+              className={`btn btn--login ${location.pathname === '/login' ? 'btn--login-active' : ''}`}
+              id="nav-login-btn"
+            >
+              Sign in
+            </Link>
+          )}
+        </nav>
+      </div>
+    </header>
+  );
 }
 
-export default App
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer__inner">
+        <div className="footer__left">
+          <p className="footer__brand">Gimme</p>
+          <p className="footer__text">Buy and sell pre-owned items locally.</p>
+        </div>
+        <div className="footer__right">
+          <p className="footer__copyright">&copy; {new Date().getFullYear()} Gimme Marketplace</p>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <div className="app-layout">
+        <NavBar />
+        <main className="container">
+          <Routes>
+            <Route path="/" element={<ListingsPage />} />
+            <Route path="/listings/:id" element={<ListingDetailPage />} />
+            <Route path="/create" element={<CreateListingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<ListingsPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </AuthProvider>
+  );
+}

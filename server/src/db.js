@@ -7,7 +7,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const DB_DIR = path.join(__dirname, 'data');
 const DB_FILE = path.join(DB_DIR, 'marketplace.db');
 
-let db = null;
+let db = null; 
 
 export function getDb(customPath = null) {
   if (db && !customPath) return db;
@@ -56,3 +56,4 @@ export function closeDb() {
     db = null;
   }
 }
+
